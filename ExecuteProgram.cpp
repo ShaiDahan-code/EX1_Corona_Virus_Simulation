@@ -1,8 +1,8 @@
 
 #include "ExecuteProgram.h"
-#include "cmake-build-debug/Omicron.h"
-#include "cmake-build-debug/Alpha.h"
-#include "cmake-build-debug/Delta.h"
+#include "Omicron.h"
+#include "Alpha.h"
+#include "Delta.h"
 #include <iostream>
 #include <fstream>
 #include <vector>

@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-#include "cmake-build-debug/SARS_CoV_2.h"
+#include "SARS_CoV_2.h"
 using namespace std;
 
 class ExecuteProgram {
