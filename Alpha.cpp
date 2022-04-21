@@ -19,7 +19,7 @@ void Alpha::update() {
 
 }
 
-bool Alpha::getProbability() {
+bool Alpha::getProbability() const {
     int random = rand() % 100;
     return random<37;
 }

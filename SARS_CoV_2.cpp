@@ -25,7 +25,7 @@ SARS_CoV_2::~SARS_CoV_2() {
     }
 }
 
-void SARS_CoV_2::decrease_counting_references() {
+void SARS_CoV_2::decrease_counting_references() const {
     if(this->father != this){
         this->father->decrease_counting_references();
     }
@@ -33,4 +33,14 @@ void SARS_CoV_2::decrease_counting_references() {
         this->counting_references--;
     }
 
+}
+
+SARS_CoV_2 &SARS_CoV_2::operator=(const SARS_CoV_2 &other) {
+    if(this->father != this){
+        this->father->decrease_counting_references();
+    }
+    this->father = other.father;
+    this->sequence = other.sequence;
+    this->father->counting_references++;
+    return *this;
 }

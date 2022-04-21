@@ -9,12 +9,14 @@
 
 class Delta : public SARS_CoV_2 {
 public:
+    //Not create a Big three because we don't need them
+
     Delta(string seq) : SARS_CoV_2(seq) {}
     Delta(SARS_CoV_2* sars , string seq) : SARS_CoV_2(sars, seq) {}
 
-    virtual char getType() { return 'D'; }
+    virtual char getType() const { return 'D'; }
     virtual void update();
-    float getProbability();
+    float getProbability() const;
 
 };
 

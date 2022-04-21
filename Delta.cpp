@@ -25,7 +25,7 @@ void Delta::update() {
 
 }
 
-float Delta::getProbability() {
+float Delta::getProbability() const {
     int ran = rand() ;
 
     float probability = ran % 100;

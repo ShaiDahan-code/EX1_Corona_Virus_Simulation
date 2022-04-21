@@ -27,8 +27,8 @@ public:
     void readFromFirstGenerationFile(); // Read the first generation
 
     //Check for each virus in the current generation if it's hit.
-    bool checkForHit();
-    float checkMatch(SARS_CoV_2* virus); // Check if the virus is a match to the target
+    bool checkForHit() const;
+    float checkMatch(SARS_CoV_2* virus) const; // Check if the virus is a match to the target
 
     //Function to add new virus to the first generation
     void addNewOmicron(string gen); // Add new Omicron to the first generation
@@ -40,8 +40,8 @@ public:
 
     //Function for "Group update"
     void updateGroup(); // Update the group
-    int getWeakestVirus(); // Get the weakest virus in the group
-    int getStrongestVirus(); // Get the strongest virus in the group
+    int getWeakestVirus() const; // Get the weakest virus in the group
+    int getStrongestVirus() const; // Get the strongest virus in the group
 
 
 };

@@ -23,15 +23,17 @@ public:
     SARS_CoV_2(SARS_CoV_2* father, string seq);
     ~SARS_CoV_2();
     //Getters and setters for sequence
-    string getSequence() { return sequence; }
-    int getSequenceLength() { return ((sequence.length()+1)/2); }
+    string getSequence() const { return sequence; }
+    int getSequenceLength() const { return ((sequence.length()+1)/2); }
     void setSequence(string seq) {sequence = seq;};
-    bool is_Father() { return (father == this); }
-    void decrease_counting_references();
-    int getCountingReferences() { return counting_references; }
+    bool is_Father() const { return (father == this); }
+    void decrease_counting_references() const;
+    int getCountingReferences() const { return counting_references; }
 
-    virtual char getType() = 0;
-    virtual void update() = 0;
+    //operator =
+    SARS_CoV_2& operator=(const SARS_CoV_2& other);
+    virtual char getType() const = 0;
+    virtual void update() const = 0;
 
 };
 

@@ -23,7 +23,7 @@ void Omicron::update() {
 
 }
 
-float Omicron::getProbability() {
+float Omicron::getProbability() const{
     int ran = rand() ;
     float probability = ran % 100;
     int reach = (200/this->getSequenceLength());
