@@ -5,7 +5,9 @@
 #include "Delta.h"
 #include <iostream>
 #include <fstream>
+#include <utility>
 #include <vector>
+#include <random>
 #include <string>
 
 using namespace std;
@@ -17,7 +19,7 @@ void ExecuteProgram::execute() {
     //Run until no hit is found between the current generation and the target or until the simulating run time is over.
     while(!checkForHit() && --simulatingRunTimes){
 
-
+        //Update Individual
         for(SARS_CoV_2* sara_cov : currentGeneration){
 
             sara_cov->update();
@@ -41,7 +43,7 @@ void ExecuteProgram::execute() {
 }
 
 void ExecuteProgram::readFromConfigFile() {
-    ifstream configData("config.dat");
+    ifstream configData(configFile);
     if(!configData.is_open()) {
         cout << "Error opening config file" << endl;
         return;
@@ -54,7 +56,7 @@ void ExecuteProgram::readFromConfigFile() {
 }
 
 void ExecuteProgram::readFromFirstGenerationFile() {
-    ifstream firstGenerationData("first_generation.dat");
+    ifstream firstGenerationData(firstGenFile);
     if(!firstGenerationData.is_open()) {
         cout << "Error opening firstGeneration file" << endl;
         return;
@@ -81,9 +83,9 @@ void ExecuteProgram::readFromFirstGenerationFile() {
     }
 }
 
-void ExecuteProgram::addNewOmicron(string gen) {
+void ExecuteProgram::addNewOmicron(const string& gen) {
     if((gen.length()+1)/2 == this->lenOfVirus) {
-        Omicron *o = new Omicron(gen);
+        auto *o = new Omicron(gen);
         this->firstGeneration.push_back(o);
         this->currentGeneration.push_back(o);
     }
@@ -91,9 +93,9 @@ void ExecuteProgram::addNewOmicron(string gen) {
         cerr << "Error: length of virus is not equal to length of gen" << endl;
 }
 
-void ExecuteProgram::addNewAlpha(string gen) {
+void ExecuteProgram::addNewAlpha(const string& gen) {
     if((gen.length()+1)/2 == this->lenOfVirus) {
-        Alpha *a = new Alpha(gen);
+        auto *a = new Alpha(gen);
         this->firstGeneration.push_back(a);
         this->currentGeneration.push_back(a);
     }
@@ -101,9 +103,9 @@ void ExecuteProgram::addNewAlpha(string gen) {
         cerr << "Error: length of virus is not equal to length of gen" << endl;
 }
 
-void ExecuteProgram::addNewDelta(string gen) {
+void ExecuteProgram::addNewDelta(const string& gen) {
     if((gen.length()+1)/2 == this->lenOfVirus) {
-        Delta *d = new Delta(gen);
+        auto *d = new Delta(gen);
         this->firstGeneration.push_back(d);
         this->currentGeneration.push_back(d);
     }
@@ -112,23 +114,21 @@ void ExecuteProgram::addNewDelta(string gen) {
 }
 
 ExecuteProgram::~ExecuteProgram() {
-    for(int i = 0; i < this->firstGeneration.size(); i++) {
-        delete this->firstGeneration[i];
+    for(auto & i : this->firstGeneration) {
+        delete i;
     }
-    for(int i = 0; i < this->currentGeneration.size(); i++) {
-        delete this->currentGeneration[i];
+    for(auto & i : this->currentGeneration) {
+        delete i;
     }
 }
 
-void ExecuteProgram::updateIndividual() {
 
-}
 
 bool ExecuteProgram::checkForHit() const {
     float match;
     // run for each in current generation
-    for(int i = 0; i < this->currentGeneration.size(); i++) {
-        match = checkMatch(this->currentGeneration[i]);
+    for(auto i : this->currentGeneration) {
+        match = checkMatch(i);
         if(match == 1) {
             return true;
         }
@@ -149,11 +149,14 @@ float ExecuteProgram::checkMatch(SARS_CoV_2 *virus) const {
                 matches++;
         }
 
-        return (float)matches/this->target.length();
+        return ((float)matches)/(float)this->target.length();
     }
 }
 
 void ExecuteProgram::updateGroup() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
     int weak1 = getWeakestVirus();
     if(!currentGeneration[weak1]->is_Father())
         delete this->currentGeneration[weak1];
@@ -169,10 +172,10 @@ void ExecuteProgram::updateGroup() {
         this->currentGeneration[weak2]->decrease_counting_references();
     currentGeneration.erase(currentGeneration.begin()+weak2);
 
-    int father_index_1 = rand()%firstGeneration.size() , father_index_2 = rand()%firstGeneration.size();
+    unsigned long long father_index_1 = gen()%firstGeneration.size() , father_index_2 = gen()%firstGeneration.size();
     while(father_index_1 == father_index_2){
-        father_index_1 = rand()%firstGeneration.size();
-        father_index_2 = rand()%firstGeneration.size();
+        father_index_1 = gen()%firstGeneration.size();
+        father_index_2 = gen()%firstGeneration.size();
     }
 
 
@@ -183,10 +186,10 @@ void ExecuteProgram::updateGroup() {
     char type_2 = firstGeneration[father_index_2]->getType();
 
     int len = target.length();
-    int s = rand()%len ,t = rand()%len;
+    unsigned long long s = gen()%len ,t = gen()%len;
     while(s > t || s<2 || s>len-2 || t<3 || t>len-3 || (t-s) < 3 ) {
-        s = rand()&len;
-        t = rand()&len;
+        s = gen()&len;
+        t = gen()&len;
     }
 
 
@@ -196,30 +199,30 @@ void ExecuteProgram::updateGroup() {
 
 
     if(type_1 == 'O') {
-        Omicron *new_virus_one_obj = new Omicron(firstGeneration[father_index_1], new_virus_one);
+        auto *new_virus_one_obj = new Omicron(firstGeneration[father_index_1], new_virus_one);
         currentGeneration.push_back(new_virus_one_obj);
     }
     else if(type_1 == 'A') {
-        Alpha *new_virus_one_obj = new Alpha(firstGeneration[father_index_1], new_virus_one);
+        auto *new_virus_one_obj = new Alpha(firstGeneration[father_index_1], new_virus_one);
         currentGeneration.push_back(new_virus_one_obj);
     }
     else if(type_1 == 'D') {
-        Delta *new_virus_one_obj = new Delta(firstGeneration[father_index_1], new_virus_one);
+        auto *new_virus_one_obj = new Delta(firstGeneration[father_index_1], new_virus_one);
         currentGeneration.push_back(new_virus_one_obj);
     }
 
 
 
     if(type_2 == 'O') {
-        Omicron *new_virus_one_obj = new Omicron(firstGeneration[father_index_2], new_virus_two);
+        auto *new_virus_one_obj = new Omicron(firstGeneration[father_index_2], new_virus_two);
         currentGeneration.push_back(new_virus_one_obj);
     }
     else if(type_2 == 'A') {
-        Alpha *new_virus_one_obj = new Alpha(firstGeneration[father_index_2], new_virus_two);
+        auto *new_virus_one_obj = new Alpha(firstGeneration[father_index_2], new_virus_two);
         currentGeneration.push_back(new_virus_one_obj);
     }
     else if(type_2 == 'D') {
-        Delta *new_virus_one_obj = new Delta(firstGeneration[father_index_2], new_virus_two);
+        auto *new_virus_one_obj = new Delta(firstGeneration[father_index_2], new_virus_two);
         currentGeneration.push_back(new_virus_one_obj);
     }
 
@@ -246,3 +249,5 @@ int ExecuteProgram::getStrongestVirus() const {
 
     return strongestVirus;
 }
+
+ExecuteProgram::ExecuteProgram(string FGN, string CF) : firstGenFile(std::move(FGN)) , configFile(std::move(CF)),lenOfVirus(0), simulatingRunTimes(0){}

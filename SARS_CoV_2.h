@@ -32,8 +32,9 @@ public:
 
     //operator =
     SARS_CoV_2& operator=(const SARS_CoV_2& other);
-    virtual char getType() const = 0;
-    virtual void update() = 0;
+
+    virtual char getType() const { return 'S'; }
+    virtual void update() {};
 
 };
 

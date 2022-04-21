@@ -3,7 +3,6 @@
 //
 
 #include "Delta.h"
-#include <iostream>
 #include <random>
 
 using namespace std;
@@ -25,8 +24,10 @@ void Delta::update() {
 
 }
 
-float Delta::getProbability() const {
-    int ran = rand() ;
+bool Delta::getProbability() const {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    unsigned long long  ran = gen() ;
 
     float probability = ran % 100;
     int reach = (100/this->getSequenceLength());

@@ -6,12 +6,14 @@
 #define EX1_EXECUTEPROGRAM_H
 
 #include <string>
+#include <utility>
 #include <vector>
 #include "SARS_CoV_2.h"
 using namespace std;
 
 class ExecuteProgram {
 private:
+    string firstGenFile, configFile;
     int lenOfVirus;
     int simulatingRunTimes;
     string target;
@@ -19,7 +21,7 @@ private:
     vector<SARS_CoV_2*> currentGeneration;
 
 public:
-    ExecuteProgram() : lenOfVirus(0),target("") , simulatingRunTimes(0){}
+    ExecuteProgram(string  FGN , string  CF);
     ~ExecuteProgram();
 
     void execute(); // Exectue the program
@@ -31,12 +33,10 @@ public:
     float checkMatch(SARS_CoV_2* virus) const; // Check if the virus is a match to the target
 
     //Function to add new virus to the first generation
-    void addNewOmicron(string gen); // Add new Omicron to the first generation
-    void addNewAlpha(string gen); // Add new Alpha to the first generation
-    void addNewDelta(string gen); // Add new Delta to the first generation
+    void addNewOmicron(const string& gen); // Add new Omicron to the first generation
+    void addNewAlpha(const string& gen); // Add new Alpha to the first generation
+    void addNewDelta(const string& gen); // Add new Delta to the first generation
 
-    //Function for "Individual update"
-    void updateIndividual(); // Update the individual
 
     //Function for "Group update"
     void updateGroup(); // Update the group

@@ -3,6 +3,7 @@
 //
 
 #include "Alpha.h"
+#include <random>
 
 void Alpha::update() {
 
@@ -20,6 +21,8 @@ void Alpha::update() {
 }
 
 bool Alpha::getProbability() const {
-    int random = rand() % 100;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    unsigned long long  random = gen() % 100;
     return random<37;
 }

@@ -3,7 +3,7 @@
 //
 
 #include "Omicron.h"
-#include <iostream>
+#include <random>
 
 using namespace std;
 
@@ -23,8 +23,10 @@ void Omicron::update() {
 
 }
 
-float Omicron::getProbability() const{
-    int ran = rand() ;
+bool Omicron::getProbability() const{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    unsigned long long ran = gen() ;
     float probability = ran % 100;
     int reach = (200/this->getSequenceLength());
     return probability < reach;
