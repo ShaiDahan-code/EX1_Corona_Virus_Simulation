@@ -25,15 +25,7 @@ SARS_CoV_2::~SARS_CoV_2() {
     }
 }
 
-void SARS_CoV_2::decrease_counting_references() const {
-    if(this->father != this){
-        this->father->decrease_counting_references();
-    }
-    else{
-        this->counting_references--;
-    }
 
-}
 
 SARS_CoV_2 &SARS_CoV_2::operator=(const SARS_CoV_2 &other) {
     if(this->father != this){
@@ -44,3 +36,14 @@ SARS_CoV_2 &SARS_CoV_2::operator=(const SARS_CoV_2 &other) {
     this->father->counting_references++;
     return *this;
 }
+
+void SARS_CoV_2::decrease_counting_references(){
+    if(this->father != this){
+        this->father->decrease_counting_references();
+    }
+    else{
+        this->counting_references--;
+    }
+
+}
+

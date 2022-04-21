@@ -27,13 +27,13 @@ public:
     int getSequenceLength() const { return ((sequence.length()+1)/2); }
     void setSequence(string seq) {sequence = seq;};
     bool is_Father() const { return (father == this); }
-    void decrease_counting_references() const;
+    void decrease_counting_references();
     int getCountingReferences() const { return counting_references; }
 
     //operator =
     SARS_CoV_2& operator=(const SARS_CoV_2& other);
     virtual char getType() const = 0;
-    virtual void update() const = 0;
+    virtual void update() = 0;
 
 };
 

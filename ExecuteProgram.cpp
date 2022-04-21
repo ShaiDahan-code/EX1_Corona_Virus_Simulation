@@ -124,7 +124,7 @@ void ExecuteProgram::updateIndividual() {
 
 }
 
-bool ExecuteProgram::checkForHit() {
+bool ExecuteProgram::checkForHit() const {
     float match;
     // run for each in current generation
     for(int i = 0; i < this->currentGeneration.size(); i++) {
@@ -137,7 +137,7 @@ bool ExecuteProgram::checkForHit() {
 
 }
 
-float ExecuteProgram::checkMatch(SARS_CoV_2 *virus) {
+float ExecuteProgram::checkMatch(SARS_CoV_2 *virus) const {
     string virusGen = virus->getSequence();
     // if virusGen is equal to target return 1 else return the number of matches between virusGen and target (0-1)
     if(virusGen == this->target)
@@ -225,7 +225,7 @@ void ExecuteProgram::updateGroup() {
 
 }
 
-int ExecuteProgram::getWeakestVirus() {
+int ExecuteProgram::getWeakestVirus() const{
     int weakestVirus = 0;
     for(int i = 1; i < this->currentGeneration.size(); i++) {
         if(checkMatch(currentGeneration[i]) < checkMatch(currentGeneration[weakestVirus])) {
@@ -236,7 +236,7 @@ int ExecuteProgram::getWeakestVirus() {
     return weakestVirus;
 }
 
-int ExecuteProgram::getStrongestVirus() {
+int ExecuteProgram::getStrongestVirus() const {
     int strongestVirus = 0;
     for(int i = 1; i < this->currentGeneration.size(); i++) {
         if(checkMatch(currentGeneration[i]) > checkMatch(currentGeneration[strongestVirus])) {
